@@ -1,0 +1,219 @@
+<% layout("/layouts/boilerplate") %>
+<!-- <%= success  %> -->
+<style>
+.filters-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+#filters {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 18px;
+  padding: 8px 0;
+  flex: 1;
+}
+
+#filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filter {
+  flex: 0 0 auto;
+  text-align: center;
+  text-decoration: none;
+  color: #444;
+  opacity: 0.8;
+  min-width: 65px;
+}
+
+.filter i {
+  font-size: 16px;
+}
+
+.filter p {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.filter:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  transition: 0.2s;
+}
+
+.scroll-btn {
+  background: #fff;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  cursor: pointer;
+}
+
+.scroll-btn i {
+  font-size: 12px;
+}
+
+.tax-toggle {
+  flex: 0 0 auto;
+}
+
+.tax-toggle .form-check {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 0;
+}
+
+.tax-toggle .form-check-label {
+  font-size: 12px;
+  color: #555;
+}
+
+@media (max-width: 576px) {
+
+  .filter {
+    min-width: 55px;
+  }
+
+  .filter i {
+    font-size: 14px;
+  }
+
+  .filter p {
+    font-size: 10px;
+  }
+
+  .scroll-btn {
+    display: none; 
+  }
+
+  .filters-wrapper {
+    gap: 5px;
+  }
+
+}
+</style>
+
+    <div class="filters-wrapper">
+  
+    <button class="scroll-btn left" onclick="scrollFilters(-200)">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+
+    <div id="filters">
+      <a href="/listings?category=trending" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-fire"></i></div>
+       <p>Trending</p> 
+      </a>
+
+      <a href="/listings?category=rooms" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-bed"></i></div>
+       <p>Rooms</p> 
+      </a>
+
+      <a href="/listings?category=iconic-cities" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-mountain-city"></i></div>
+       <p>Iconic cities</p> 
+      </a>
+
+      <a href="/listings?category=mountain" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-mountain"></i></div>
+       <p>Mountain</p> 
+      </a>
+
+      <a  href="/listings?category=castles" class="filter text-decoration-none text-dark">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+       <p>Castles</p> 
+      </a>
+
+      <a href="/listings?category=arctic" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-snowflake"></i></i></div>
+       <p>Arctic </p> 
+      </a>
+
+      <a href="/listings?category=camping" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-campground"></i></div>
+       <p>Camping</p> 
+      </a>
+
+      <a href="/listings?category=farms" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-tractor"></i></div>
+       <p>Farms</p> 
+      </a>
+
+      <a href="/listings?category=amazing-pools" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+       <p>Amazing Pools</p> 
+      </a>
+
+      <a href="/listings?category=domes" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-igloo"></i></div>
+       <p>Domes</p> 
+      </a>
+
+      <a href="/listings?category=ground" class="filter text-decoration-none text-dark">
+        <div><i class="fa-solid fa-baseball-bat-ball"></i></div>
+       <p>Ground</p> 
+      </a>
+      </div>
+
+      <button class="scroll-btn right" onclick="scrollFilters(200)">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+
+      <div class="tax-toggle">
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="switchCheckDefault">
+    <label class="form-check-label" for="switchCheckDefault">
+     &nbsp; Tax include
+    </label>
+  </div>
+</div>
+    </div>
+    
+    
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for(let listing of listings){ %>
+        <a href="/listings/<%= listing._id %>" class="listing-list">
+    <div class="card col listing-card" >
+  <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+  <div class="card-img-overlay"></div>
+  <div class="card-body " >
+    <p class="card-text">
+       <b> <%= listing.title%><br></b>
+        &#8377;<%=listing.price.toLocaleString("en-IN")%> / night
+        <i class="tax-info">&nbsp; &nbsp; +18% Gst</i>
+    </p>
+  </div>
+</div>
+</a>
+<%}%>
+</div>
+  
+<script>
+  let taxSwitch = document.getElementById("switchCheckDefault");
+  taxSwitch.addEventListener("click",()=>{
+    let taxinfo = document.getElementsByClassName("tax-info");
+    for(info of taxinfo){
+      if(info.style.display !="inline"){
+          info.style.display = "inline";
+      }else{
+        info.style.display="none";
+      }
+      
+    }
+  })
+</script>
+<script>
+function scrollFilters(amount){
+  document.getElementById("filters").scrollLeft += amount;
+}
+</script>
+
